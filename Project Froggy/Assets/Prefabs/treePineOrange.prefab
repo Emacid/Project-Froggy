@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3749424599989051447}
   - component: {fileID: 4418971185639148353}
+  - component: {fileID: 7182591045693586124}
   m_Layer: 0
   m_Name: treePineOrange
   m_TagString: Untagged
@@ -84,3 +85,24 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!65 &7182591045693586124
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8297752407293720875}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.1199996, y: 5.08, z: 0.82764363}
+  m_Center: {x: 0, y: 0, z: -0.2638219}
