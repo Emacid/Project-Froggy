@@ -7,9 +7,13 @@ public class Outline : MonoBehaviour
 
     private SpriteRenderer SpriteRendererOfChildren;
 
+    private ItemPickup ItemPickup;
+
     // Start is called before the first frame update
     void Start()
     {
+        ItemPickup = GameObject.Find("Body").GetComponent<ItemPickup>();
+
         foreach (Transform child in transform)
         {
             SpriteRendererOfChildren = child.GetComponent<SpriteRenderer>();
@@ -29,7 +33,8 @@ public class Outline : MonoBehaviour
         if (other.CompareTag("Player")) 
         {
             Debug.Log("Player Outline Tetikledi!");
-           SpriteRendererOfChildren.sortingOrder = 0;
+            ItemPickup.canPickUpItem = true;
+           SpriteRendererOfChildren.sortingOrder = 1;
         }
         
     }
@@ -37,6 +42,7 @@ public class Outline : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         Debug.Log("Player Outline Alanýndan Çýktý!");
+        ItemPickup.canPickUpItem = false;
         SpriteRendererOfChildren.sortingOrder = -1;
     }
 
