@@ -10,6 +10,8 @@ public class ItemPickup : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private Animator animator;
 
+    public float playerDeactivateTime = 4.0f;
+    
     public bool canPickUpItem = false;
 
     public bool inAreaRose = false;
@@ -30,11 +32,14 @@ public class ItemPickup : MonoBehaviour
     public AudioSource pickupSound;
 
     public PlayableDirector princessAnim;
-
     public PlayableDirector fishermanAnim;
+    public PlayableDirector princessShortAnim;
+    public PlayableDirector fishermanShortAnim;
 
     public Animator princessAnimator;
+    public Animator princessShortAnimator;
     public Animator fishermanAnimator;
+    public Animator fishermanShortAnimator;
 
     public GameObject[] stomachItems;
 
@@ -96,6 +101,16 @@ public class ItemPickup : MonoBehaviour
             StartCoroutine("DeletePrincess");
         }
 
+        else if (Input.GetKeyDown(KeyCode.Space) && inAreaPrincess)
+        {
+            //Princess Short Anim
+            Debug.Log("Princess Short Animasyon Triggerlandý");
+            princessShortAnim.Play();
+            princessShortAnimator.SetBool("PlayPrincessShort", true);
+            StartCoroutine("DeactivatePlayerMovement");
+            princessShortAnim.time = 0;
+        }
+
         if (Input.GetKeyDown(KeyCode.Space) && inAreaFisherman && WormTaken)
         {
             //Fisherman Full Anim
@@ -103,6 +118,16 @@ public class ItemPickup : MonoBehaviour
             fishermanAnim.Play();
             fishermanAnimator.SetBool("PlayFishermanAnim", true);
             StartCoroutine("DeleteFisherman");
+        }
+
+        else if (Input.GetKeyDown(KeyCode.Space) && inAreaFisherman)
+        {
+            //Fisherman Short Anim
+            Debug.Log("Fisherman Short Animasyon Triggerlandý");
+            fishermanShortAnim.Play();
+            fishermanShortAnimator.SetBool("PlayFishermanShort", true);
+            StartCoroutine("DeactivatePlayerMovement");
+            fishermanShortAnim.time = 0;
         }
 
         if (Input.GetKeyDown(KeyCode.Q))
@@ -119,6 +144,13 @@ public class ItemPickup : MonoBehaviour
         animator.SetBool("isPickingUp", true);
         yield return new WaitForSeconds(0.7f);
         animator.SetBool("isPickingUp", false);
+    }
+
+    private IEnumerator DeactivatePlayerMovement()
+    {
+        playerScript.enabled = false;
+        yield return new WaitForSeconds(playerDeactivateTime);
+        playerScript.enabled = true;
     }
 
     private IEnumerator DeletePrincess()
