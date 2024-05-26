@@ -31,9 +31,20 @@ public class ItemPickup : MonoBehaviour
 
     public PlayableDirector princessAnim;
 
+    public PlayableDirector fishermanAnim;
+
     public Animator princessAnimator;
+    public Animator fishermanAnimator;
 
     public GameObject[] stomachItems;
+
+    public GameObject princessGameObject;
+    public GameObject fishermanGameObject;
+
+    public Player playerScript;
+
+    public AudioSource princessAudio;
+
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -79,8 +90,19 @@ public class ItemPickup : MonoBehaviour
         {
             //Princess Full Anim
             Debug.Log("Princess Animasyon Triggerlandý");
+            princessAudio.Play();
             princessAnim.Play();
             princessAnimator.SetBool("PlayPrincessAnim", true);
+            StartCoroutine("DeletePrincess");
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space) && inAreaFisherman && WormTaken)
+        {
+            //Fisherman Full Anim
+            Debug.Log("Fisherman Animasyon Triggerlandý");
+            fishermanAnim.Play();
+            fishermanAnimator.SetBool("PlayFishermanAnim", true);
+            StartCoroutine("DeleteFisherman");
         }
 
         if (Input.GetKeyDown(KeyCode.Q))
@@ -99,6 +121,24 @@ public class ItemPickup : MonoBehaviour
         animator.SetBool("isPickingUp", false);
     }
 
+    private IEnumerator DeletePrincess()
+    {
+        playerScript.enabled = false;
+        yield return new WaitForSeconds(3f);
+        princessGameObject.SetActive(false);
+        yield return new WaitForSeconds(10f);
+        playerScript.enabled = true;
+    }
+
+    private IEnumerator DeleteFisherman()
+    {
+        playerScript.enabled = false;
+        yield return new WaitForSeconds(5f);
+        fishermanGameObject.SetActive(false);
+        stomachItems[3].gameObject.SetActive(false);
+        yield return new WaitForSeconds(7f);
+        playerScript.enabled = true;
+    }
 
     private void OnTriggerEnter(Collider other)
     {
