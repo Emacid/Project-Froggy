@@ -33,18 +33,23 @@ public class ItemPickup : MonoBehaviour
 
     public PlayableDirector princessAnim;
     public PlayableDirector fishermanAnim;
+    public PlayableDirector BigTreeAnim;
     public PlayableDirector princessShortAnim;
     public PlayableDirector fishermanShortAnim;
+    public PlayableDirector BigTreeShortAnim;
 
     public Animator princessAnimator;
     public Animator princessShortAnimator;
     public Animator fishermanAnimator;
     public Animator fishermanShortAnimator;
+    public Animator BigTreeAnimator;
+    public Animator BigTreeShortAnimator;
 
     public GameObject[] stomachItems;
 
     public GameObject princessGameObject;
     public GameObject fishermanGameObject;
+    public GameObject BigTreeGameObject;
 
     public Player playerScript;
 
@@ -130,6 +135,25 @@ public class ItemPickup : MonoBehaviour
             fishermanShortAnim.time = 0;
         }
 
+        if (Input.GetKeyDown(KeyCode.Space) && inAreaBigTree && SlingTaken)
+        {
+            //Big Tree Fairy Full Anim
+            Debug.Log("Big Tree Animasyon Triggerlandý");
+            BigTreeAnim.Play();
+            BigTreeAnimator.SetBool("PlayFairyAnim", true);
+            StartCoroutine("DeleteBigTree");
+        }
+
+        else if (Input.GetKeyDown(KeyCode.Space) && inAreaBigTree)
+        {
+            //Big Tree Fairy Short Anim
+            Debug.Log("Big Tree Short Animasyon Triggerlandý");
+            BigTreeShortAnim.Play();
+            BigTreeShortAnimator.SetBool("PlayFairyShort", true);
+            StartCoroutine("DeactivatePlayerMovement");
+            fishermanShortAnim.time = 0;
+        }
+
         if (Input.GetKeyDown(KeyCode.Q))
         {
             //ITEM DROP TEST
@@ -168,10 +192,18 @@ public class ItemPickup : MonoBehaviour
         yield return new WaitForSeconds(5f);
         fishermanGameObject.SetActive(false);
         stomachItems[3].gameObject.SetActive(false);
-        yield return new WaitForSeconds(7f);
+        yield return new WaitForSeconds(7.5f);
         playerScript.enabled = true;
     }
 
+    private IEnumerator DeleteBigTree()
+    {
+        playerScript.enabled = false;
+        yield return new WaitForSeconds(3f);
+        BigTreeGameObject.SetActive(false);
+        yield return new WaitForSeconds(10f);
+        playerScript.enabled = true;
+    }
     private void OnTriggerEnter(Collider other)
     {
         if(other.CompareTag("Rose")) 
