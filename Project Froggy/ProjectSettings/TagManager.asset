@@ -8,6 +8,10 @@ TagManager:
   - Sling
   - Worm
   - Lyre
+  - Princess
+  - Bear
+  - Fisherman
+  - BigTree
   layers:
   - Default
   - TransparentFX

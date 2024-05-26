@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
 
 public class ItemPickup : MonoBehaviour
 {
@@ -16,12 +17,21 @@ public class ItemPickup : MonoBehaviour
     public bool inAreaLyre = false;
     public bool inAreaWorm = false;
 
+    public bool inAreaPrincess = false;
+    public bool inAreaBear = false;
+    public bool inAreaFisherman = false;
+    public bool inAreaBigTree = false;
+
     public bool RoseTaken = false;
     public bool SlingTaken = false;
     public bool LyreTaken = false;
     public bool WormTaken = false;
 
     public AudioSource pickupSound;
+
+    public PlayableDirector princessAnim;
+
+    public Animator princessAnimator;
 
     public GameObject[] stomachItems;
     void Start()
@@ -65,6 +75,14 @@ public class ItemPickup : MonoBehaviour
             PickWorm();
         }
 
+        if (Input.GetKeyDown(KeyCode.Space) && inAreaPrincess && RoseTaken)
+        {
+            //Princess Full Anim
+            Debug.Log("Princess Animasyon Triggerlandý");
+            princessAnim.Play();
+            princessAnimator.SetBool("PlayPrincessAnim", true);
+        }
+
         if (Input.GetKeyDown(KeyCode.Q))
         {
             //ITEM DROP TEST
@@ -104,11 +122,31 @@ public class ItemPickup : MonoBehaviour
             Debug.Log("Lyre'ýn alanýndasýn");
             inAreaLyre = true;
         }
+        else if (other.CompareTag("Bear"))
+        {
+            Debug.Log("Bear'ýn alanýndasýn");
+            inAreaBear = true;
+        }
+        else if (other.CompareTag("Princess"))
+        {
+            Debug.Log("Princess'ýn alanýndasýn");
+            inAreaPrincess = true;
+        }
+        else if (other.CompareTag("BigTree"))
+        {
+            Debug.Log("BigTree'ýn alanýndasýn");
+            inAreaBigTree = true;
+        }
+        else if (other.CompareTag("Fisherman"))
+        {
+            Debug.Log("Fisherman'ýn alanýndasýn");
+            inAreaFisherman = true;
+        }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        inAreaLyre = false; inAreaSling = false; inAreaRose = false; inAreaWorm = false;
+        inAreaLyre = false; inAreaSling = false; inAreaRose = false; inAreaWorm = false; inAreaPrincess=false; inAreaBigTree=false; inAreaFisherman=false; inAreaBear = false;   
     }
 
     private void PickRose() 
@@ -118,6 +156,9 @@ public class ItemPickup : MonoBehaviour
         stomachItems[2].gameObject.SetActive(false);
         stomachItems[3].gameObject.SetActive(false);
         RoseTaken = true;
+        SlingTaken = false;
+        LyreTaken = false;
+        WormTaken = false;
     }
 
     private void PickSling()
@@ -126,7 +167,10 @@ public class ItemPickup : MonoBehaviour
         stomachItems[1].gameObject.SetActive(true);
         stomachItems[2].gameObject.SetActive(false);
         stomachItems[3].gameObject.SetActive(false);
+        RoseTaken = false;
         SlingTaken = true;
+        LyreTaken = false;
+        WormTaken = false;
     }
 
     private void Picklyre()
@@ -135,7 +179,10 @@ public class ItemPickup : MonoBehaviour
         stomachItems[1].gameObject.SetActive(false);
         stomachItems[2].gameObject.SetActive(true);
         stomachItems[3].gameObject.SetActive(false);
+        RoseTaken = false;
+        SlingTaken = false;
         LyreTaken = true;
+        WormTaken = false;
     }
 
     private void PickWorm()
@@ -144,6 +191,9 @@ public class ItemPickup : MonoBehaviour
         stomachItems[1].gameObject.SetActive(false);
         stomachItems[2].gameObject.SetActive(false);
         stomachItems[3].gameObject.SetActive(true);
+        RoseTaken = false;
+        SlingTaken = false;
+        LyreTaken = false;
         WormTaken = true;
     }
 
