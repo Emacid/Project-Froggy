@@ -29,6 +29,11 @@ public class ItemPickup : MonoBehaviour
     public bool LyreTaken = false;
     public bool WormTaken = false;
 
+    public GameObject roseObject;
+    public GameObject wormObject;
+    public GameObject slingObject;
+    public GameObject[] lyreObjects;
+
     public AudioSource pickupSound;
 
     public PlayableDirector princessAnim;
