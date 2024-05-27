@@ -5,7 +5,7 @@ using UnityEngine;
 public class Outline : MonoBehaviour
 {
 
-    private SpriteRenderer SpriteRendererOfChildren;
+    public SpriteRenderer SpriteRendererOfChildren;
 
     private ItemPickup ItemPickup;
 

@@ -9,10 +9,15 @@ public class ItemPickup : MonoBehaviour
 
     private SpriteRenderer spriteRenderer;
     private Animator animator;
+    private LyreFromGod lyreFromGod;
 
     public float playerDeactivateTime = 4.0f;
     
     public bool canPickUpItem = false;
+    private bool canMoveNow = false;
+
+    public bool holdTheAnim = false;
+    public bool holdTheAnimShort = false;
 
     public bool inAreaRose = false;
     public bool inAreaSling = false;
@@ -28,6 +33,11 @@ public class ItemPickup : MonoBehaviour
     public bool SlingTaken = false;
     public bool LyreTaken = false;
     public bool WormTaken = false;
+
+    private bool roseGoneForever = false;
+    private bool slingGoneForever = false;
+    private bool lyreGoneForever = false;
+    private bool wormGoneForever = false;
 
     public GameObject roseObject;
     public GameObject wormObject;
@@ -51,10 +61,17 @@ public class ItemPickup : MonoBehaviour
     public Animator BigTreeShortAnimator;
 
     public GameObject[] stomachItems;
+    public Footsteps footsteps;
 
     public GameObject princessGameObject;
     public GameObject fishermanGameObject;
-    public GameObject BigTreeGameObject;
+    public GameObject[] BigTreeGameObjects;
+
+    public GameObject noLeafTreeHolder;
+
+    public Outline roseOutline;
+    public Outline wormOutline;
+    public Outline slingOutline;
 
     public Player playerScript;
 
@@ -64,6 +81,7 @@ public class ItemPickup : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        lyreFromGod = GameObject.Find("Lyre Controller").GetComponent<LyreFromGod>();
     }
 
     // Update is called once per frame
@@ -75,6 +93,8 @@ public class ItemPickup : MonoBehaviour
             Debug.Log("Rose Alýndý");
             StartCoroutine("PickupItem");
             PickRose();
+            inAreaRose = false;
+            canPickUpItem = false;
         }
 
         if (Input.GetKeyDown(KeyCode.Space) && canPickUpItem && inAreaLyre)
@@ -91,6 +111,8 @@ public class ItemPickup : MonoBehaviour
             Debug.Log("Sling Alýndý");
             StartCoroutine("PickupItem");
             PickSling();
+            inAreaSling = false;
+            canPickUpItem = false;
         }
 
         if (Input.GetKeyDown(KeyCode.Space) && canPickUpItem && inAreaWorm)
@@ -99,71 +121,100 @@ public class ItemPickup : MonoBehaviour
             Debug.Log("Worm Alýndý");
             StartCoroutine("PickupItem");
             PickWorm();
+            inAreaWorm = false;
+            canPickUpItem = false;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && inAreaPrincess && RoseTaken)
+        if (Input.GetKeyDown(KeyCode.Space) && inAreaPrincess && RoseTaken && !holdTheAnim)
         {
             //Princess Full Anim
             Debug.Log("Princess Animasyon Triggerlandý");
+            StartCoroutine("HoldingTheFootstepstLong");
+            holdTheAnim = true;
+            StartCoroutine("HoldingTheAnimLong");
             princessAudio.Play();
             princessAnim.Play();
             princessAnimator.SetBool("PlayPrincessAnim", true);
             StartCoroutine("DeletePrincess");
+            roseObject.SetActive(false);
+            roseGoneForever = true;
+            inAreaPrincess = false;
         }
 
-        else if (Input.GetKeyDown(KeyCode.Space) && inAreaPrincess)
+        else if (Input.GetKeyDown(KeyCode.Space) && inAreaPrincess && !holdTheAnimShort)
         {
             //Princess Short Anim
             Debug.Log("Princess Short Animasyon Triggerlandý");
+            StartCoroutine("HoldingTheFootstepstShort");
+            holdTheAnimShort = true;
+            StartCoroutine("HoldingTheAnimShort");
             princessShortAnim.Play();
             princessShortAnimator.SetBool("PlayPrincessShort", true);
             StartCoroutine("DeactivatePlayerMovement");
             princessShortAnim.time = 0;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && inAreaFisherman && WormTaken)
+        if (Input.GetKeyDown(KeyCode.Space) && inAreaFisherman && WormTaken && !holdTheAnim)
         {
             //Fisherman Full Anim
             Debug.Log("Fisherman Animasyon Triggerlandý");
+            StartCoroutine("HoldingTheFootstepstLong");
+            holdTheAnim = true;
+            StartCoroutine("HoldingTheAnimLong");
             fishermanAnim.Play();
             fishermanAnimator.SetBool("PlayFishermanAnim", true);
             StartCoroutine("DeleteFisherman");
+            wormObject.SetActive(false);
+            wormGoneForever = true;
+            inAreaFisherman = false;
         }
 
-        else if (Input.GetKeyDown(KeyCode.Space) && inAreaFisherman)
+        else if (Input.GetKeyDown(KeyCode.Space) && inAreaFisherman && !holdTheAnimShort)
         {
             //Fisherman Short Anim
             Debug.Log("Fisherman Short Animasyon Triggerlandý");
+            StartCoroutine("HoldingTheFootstepstShort");
+            holdTheAnimShort = true;
+            StartCoroutine("HoldingTheAnimShort");
             fishermanShortAnim.Play();
             fishermanShortAnimator.SetBool("PlayFishermanShort", true);
             StartCoroutine("DeactivatePlayerMovement");
             fishermanShortAnim.time = 0;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && inAreaBigTree && SlingTaken)
+        if (Input.GetKeyDown(KeyCode.Space) && inAreaBigTree && SlingTaken && !holdTheAnim)
         {
             //Big Tree Fairy Full Anim
             Debug.Log("Big Tree Animasyon Triggerlandý");
+            StartCoroutine("HoldingTheFootstepstLong");
+            holdTheAnim = true;
+            StartCoroutine("HoldingTheAnimLong");
             BigTreeAnim.Play();
             BigTreeAnimator.SetBool("PlayFairyAnim", true);
             StartCoroutine("DeleteBigTree");
+            slingObject.SetActive(false);
+            slingGoneForever = true;
+            inAreaBigTree = false;
         }
 
-        else if (Input.GetKeyDown(KeyCode.Space) && inAreaBigTree)
+        else if (Input.GetKeyDown(KeyCode.Space) && inAreaBigTree && !holdTheAnimShort)
         {
             //Big Tree Fairy Short Anim
             Debug.Log("Big Tree Short Animasyon Triggerlandý");
+            StartCoroutine("HoldingTheFootstepstShort");
+            holdTheAnimShort = true;
+            StartCoroutine("HoldingTheAnimShort");
             BigTreeShortAnim.Play();
             BigTreeShortAnimator.SetBool("PlayFairyShort", true);
             StartCoroutine("DeactivatePlayerMovement");
             fishermanShortAnim.time = 0;
         }
 
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (roseGoneForever && slingGoneForever && wormGoneForever && !canMoveNow) 
         {
-            //ITEM DROP TEST
-            Debug.Log("Item Býrakýlmaya zorlandý");
-            animator.SetBool("isPickingUp", false);
+            lyreFromGod.allTaken = true;
+            StartCoroutine("DeactivatePlayerMovement");
+            canMoveNow = true;
         }
     }
 
@@ -187,6 +238,7 @@ public class ItemPickup : MonoBehaviour
         playerScript.enabled = false;
         yield return new WaitForSeconds(3f);
         princessGameObject.SetActive(false);
+        stomachItems[0].gameObject.SetActive(false);
         yield return new WaitForSeconds(10f);
         playerScript.enabled = true;
     }
@@ -205,7 +257,10 @@ public class ItemPickup : MonoBehaviour
     {
         playerScript.enabled = false;
         yield return new WaitForSeconds(3f);
-        BigTreeGameObject.SetActive(false);
+        BigTreeGameObjects[0].SetActive(false);
+        BigTreeGameObjects[1].SetActive(false);
+        BigTreeGameObjects[2].SetActive(false);
+        stomachItems[1].gameObject.SetActive(false);
         yield return new WaitForSeconds(10f);
         playerScript.enabled = true;
     }
@@ -255,55 +310,131 @@ public class ItemPickup : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        inAreaLyre = false; inAreaSling = false; inAreaRose = false; inAreaWorm = false; inAreaPrincess=false; inAreaBigTree=false; inAreaFisherman=false; inAreaBear = false;   
+        inAreaLyre = false; inAreaSling = false; inAreaRose = false; inAreaWorm = false; inAreaPrincess=false; inAreaBigTree=false; inAreaFisherman=false; inAreaBear = false; canPickUpItem = false;   
     }
 
     private void PickRose() 
     {
+        roseObject.SetActive(false);
+
         stomachItems[0].gameObject.SetActive(true);
         stomachItems[1].gameObject.SetActive(false);
         stomachItems[2].gameObject.SetActive(false);
         stomachItems[3].gameObject.SetActive(false);
+        
         RoseTaken = true;
         SlingTaken = false;
         LyreTaken = false;
         WormTaken = false;
+
+        StartCoroutine("ItemsToStartingPlaces");
     }
 
     private void PickSling()
     {
+        slingObject.SetActive(false);
+        noLeafTreeHolder.SetActive(true);
+
         stomachItems[0].gameObject.SetActive(false);
         stomachItems[1].gameObject.SetActive(true);
         stomachItems[2].gameObject.SetActive(false);
         stomachItems[3].gameObject.SetActive(false);
+        
         RoseTaken = false;
         SlingTaken = true;
         LyreTaken = false;
         WormTaken = false;
+
+        StartCoroutine("ItemsToStartingPlaces");
     }
 
     private void Picklyre()
     {
+        lyreObjects[0].SetActive(false);
+        lyreObjects[1].SetActive(false);
+        lyreObjects[2].SetActive(false);
+
         stomachItems[0].gameObject.SetActive(false);
         stomachItems[1].gameObject.SetActive(false);
         stomachItems[2].gameObject.SetActive(true);
         stomachItems[3].gameObject.SetActive(false);
+        
         RoseTaken = false;
         SlingTaken = false;
         LyreTaken = true;
         WormTaken = false;
+
+        StartCoroutine("ItemsToStartingPlaces");
     }
 
     private void PickWorm()
     {
+        wormObject.SetActive(false);
+
         stomachItems[0].gameObject.SetActive(false);
         stomachItems[1].gameObject.SetActive(false);
         stomachItems[2].gameObject.SetActive(false);
         stomachItems[3].gameObject.SetActive(true);
+        
         RoseTaken = false;
         SlingTaken = false;
         LyreTaken = false;
         WormTaken = true;
+
+        StartCoroutine("ItemsToStartingPlaces");
     }
 
+
+    private IEnumerator ItemsToStartingPlaces()
+    {
+        yield return new WaitForSeconds(0.01f);
+
+        if (!roseGoneForever && !RoseTaken) 
+        {
+            roseObject.SetActive(true);
+            roseOutline.SpriteRendererOfChildren.sortingOrder = -1;
+        }
+
+        if (!wormGoneForever && !WormTaken)
+        {
+            wormObject.SetActive(true);
+            wormOutline.SpriteRendererOfChildren.sortingOrder = -1;
+        }
+
+        if (!slingGoneForever && !SlingTaken)
+        {
+            slingObject.SetActive(true);
+            slingOutline.SpriteRendererOfChildren.sortingOrder = -1;
+        }
+    }
+
+    private IEnumerator HoldingTheAnimLong()
+    {
+        yield return new WaitForSeconds(12f);
+        holdTheAnim = false;
+
+    }
+
+    private IEnumerator HoldingTheAnimShort()
+    {
+        yield return new WaitForSeconds(4f);
+        holdTheAnimShort = false;
+
+    }
+
+    private IEnumerator HoldingTheFootstepstLong()
+    {
+        footsteps.enabled = false;
+        yield return new WaitForSeconds(12f);
+        footsteps.enabled = true;
+        
+    }
+
+    private IEnumerator HoldingTheFootstepstShort()
+    {
+        footsteps.enabled = false;
+        yield return new WaitForSeconds(4f);
+        footsteps.enabled = true;
+        
+    }
 }
