@@ -52,6 +52,8 @@ public class ItemPickup : MonoBehaviour
     public PlayableDirector princessShortAnim;
     public PlayableDirector fishermanShortAnim;
     public PlayableDirector BigTreeShortAnim;
+    public PlayableDirector BearShortAnim;
+    public PlayableDirector BearLongAnim;
 
     public Animator princessAnimator;
     public Animator princessShortAnimator;
@@ -59,6 +61,8 @@ public class ItemPickup : MonoBehaviour
     public Animator fishermanShortAnimator;
     public Animator BigTreeAnimator;
     public Animator BigTreeShortAnimator;
+    public Animator BearShortAnimator;
+    public Animator BearLongAnimator;
 
     public GameObject[] stomachItems;
     public Footsteps footsteps;
@@ -66,6 +70,7 @@ public class ItemPickup : MonoBehaviour
     public GameObject princessGameObject;
     public GameObject fishermanGameObject;
     public GameObject[] BigTreeGameObjects;
+    public GameObject bearObject;
 
     public GameObject noLeafTreeHolder;
 
@@ -207,7 +212,34 @@ public class ItemPickup : MonoBehaviour
             BigTreeShortAnim.Play();
             BigTreeShortAnimator.SetBool("PlayFairyShort", true);
             StartCoroutine("DeactivatePlayerMovement");
-            fishermanShortAnim.time = 0;
+            BigTreeShortAnim.time = 0;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space) && inAreaBear && LyreTaken && !holdTheAnim)
+        {
+            //Ayý Full Anim
+            Debug.Log("Ayýyý öldürme Triggerlandý");
+            StartCoroutine("HoldingTheFootstepstLong");
+            holdTheAnim = true;
+            StartCoroutine("HoldingTheAnimLong");
+            BearLongAnim.Play();
+            BearLongAnimator.SetBool("PlayBearAnim", true);
+            StartCoroutine("DeleteBear");
+            lyreGoneForever = true;
+            inAreaBear = false;
+        }
+
+        else if (Input.GetKeyDown(KeyCode.Space) && inAreaBear && !holdTheAnimShort)
+        {
+            //Ayý Short Anim
+            Debug.Log("Ayý Bizi Öldürüyoo Animasyon Triggerlandý");
+            StartCoroutine("HoldingTheFootstepstShort");
+            holdTheAnimShort = true;
+            StartCoroutine("HoldingTheAnimShort");
+            BearShortAnim.Play();
+            BearShortAnimator.SetBool("PlayBearShort", true);
+            StartCoroutine("DeactivatePlayerMovement");
+            BearShortAnim.time = 0;
         }
 
         if (roseGoneForever && slingGoneForever && wormGoneForever && !canMoveNow) 
@@ -261,6 +293,16 @@ public class ItemPickup : MonoBehaviour
         BigTreeGameObjects[1].SetActive(false);
         BigTreeGameObjects[2].SetActive(false);
         stomachItems[1].gameObject.SetActive(false);
+        yield return new WaitForSeconds(10f);
+        playerScript.enabled = true;
+    }
+
+    private IEnumerator DeleteBear()
+    {
+        playerScript.enabled = false;
+        yield return new WaitForSeconds(3f);
+        bearObject.SetActive(false);
+        stomachItems[2].gameObject.SetActive(false);
         yield return new WaitForSeconds(10f);
         playerScript.enabled = true;
     }
@@ -410,14 +452,14 @@ public class ItemPickup : MonoBehaviour
 
     private IEnumerator HoldingTheAnimLong()
     {
-        yield return new WaitForSeconds(12f);
+        yield return new WaitForSeconds(13f);
         holdTheAnim = false;
 
     }
 
     private IEnumerator HoldingTheAnimShort()
     {
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(5f);
         holdTheAnimShort = false;
 
     }
@@ -425,7 +467,7 @@ public class ItemPickup : MonoBehaviour
     private IEnumerator HoldingTheFootstepstLong()
     {
         footsteps.enabled = false;
-        yield return new WaitForSeconds(12f);
+        yield return new WaitForSeconds(13f);
         footsteps.enabled = true;
         
     }
@@ -433,7 +475,7 @@ public class ItemPickup : MonoBehaviour
     private IEnumerator HoldingTheFootstepstShort()
     {
         footsteps.enabled = false;
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(5f);
         footsteps.enabled = true;
         
     }

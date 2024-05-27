@@ -32,7 +32,7 @@ public class LyreFromGod : MonoBehaviour
         lyreObjects[0].SetActive(true);
         lyreObjects[1].SetActive(true);
         lyreObjects[2].SetActive(true);
-        yield return new WaitForSeconds(3.7f);
+        yield return new WaitForSeconds(5.3f);
         objectsToDeactivate[0].SetActive(false);
         objectsToDeactivate[1].SetActive(false);
         objectsToDeactivate[2].SetActive(false);
