@@ -39,7 +39,7 @@ public class LyreFromGod : MonoBehaviour
         objectsToDeactivate[3].SetActive(false);
         objectsToDeactivate[4].SetActive(false);
         objectsToDeactivate[5].SetActive(false);
-        objectsToDeactivate[6].SetActive(false);
+
     }
 
 }

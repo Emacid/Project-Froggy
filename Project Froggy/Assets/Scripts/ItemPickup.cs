@@ -45,6 +45,7 @@ public class ItemPickup : MonoBehaviour
     public GameObject[] lyreObjects;
 
     public AudioSource pickupSound;
+    public GameObject bearKillSound;
 
     public PlayableDirector princessAnim;
     public PlayableDirector fishermanAnim;
@@ -81,12 +82,15 @@ public class ItemPickup : MonoBehaviour
     public Player playerScript;
 
     public AudioSource princessAudio;
+    public AudioSource princessAudioShort;
 
+    public GameObject restartUI;
     void Start()
     {
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         lyreFromGod = GameObject.Find("Lyre Controller").GetComponent<LyreFromGod>();
+        
     }
 
     // Update is called once per frame
@@ -150,6 +154,7 @@ public class ItemPickup : MonoBehaviour
         {
             //Princess Short Anim
             Debug.Log("Princess Short Animasyon Triggerlandý");
+            princessAudioShort.gameObject.SetActive(true);
             StartCoroutine("HoldingTheFootstepstShort");
             holdTheAnimShort = true;
             StartCoroutine("HoldingTheAnimShort");
@@ -166,6 +171,7 @@ public class ItemPickup : MonoBehaviour
             StartCoroutine("HoldingTheFootstepstLong");
             holdTheAnim = true;
             StartCoroutine("HoldingTheAnimLong");
+            princessAudio.Play();
             fishermanAnim.Play();
             fishermanAnimator.SetBool("PlayFishermanAnim", true);
             StartCoroutine("DeleteFisherman");
@@ -178,6 +184,7 @@ public class ItemPickup : MonoBehaviour
         {
             //Fisherman Short Anim
             Debug.Log("Fisherman Short Animasyon Triggerlandý");
+            princessAudioShort.gameObject.SetActive(true);
             StartCoroutine("HoldingTheFootstepstShort");
             holdTheAnimShort = true;
             StartCoroutine("HoldingTheAnimShort");
@@ -194,6 +201,7 @@ public class ItemPickup : MonoBehaviour
             StartCoroutine("HoldingTheFootstepstLong");
             holdTheAnim = true;
             StartCoroutine("HoldingTheAnimLong");
+            princessAudio.Play();
             BigTreeAnim.Play();
             BigTreeAnimator.SetBool("PlayFairyAnim", true);
             StartCoroutine("DeleteBigTree");
@@ -206,6 +214,7 @@ public class ItemPickup : MonoBehaviour
         {
             //Big Tree Fairy Short Anim
             Debug.Log("Big Tree Short Animasyon Triggerlandý");
+            princessAudioShort.gameObject.SetActive(true);
             StartCoroutine("HoldingTheFootstepstShort");
             holdTheAnimShort = true;
             StartCoroutine("HoldingTheAnimShort");
@@ -222,6 +231,7 @@ public class ItemPickup : MonoBehaviour
             StartCoroutine("HoldingTheFootstepstLong");
             holdTheAnim = true;
             StartCoroutine("HoldingTheAnimLong");
+            princessAudio.Play();
             BearLongAnim.Play();
             BearLongAnimator.SetBool("PlayBearAnim", true);
             StartCoroutine("DeleteBear");
@@ -233,13 +243,14 @@ public class ItemPickup : MonoBehaviour
         {
             //Ayý Short Anim
             Debug.Log("Ayý Bizi Öldürüyoo Animasyon Triggerlandý");
-            StartCoroutine("HoldingTheFootstepstShort");
+            StartCoroutine("HoldingTheFootstepstForever");
             holdTheAnimShort = true;
             StartCoroutine("HoldingTheAnimShort");
             BearShortAnim.Play();
             BearShortAnimator.SetBool("PlayBearShort", true);
             StartCoroutine("DeactivatePlayerMovement");
             BearShortAnim.time = 0;
+            StartCoroutine("killedByBear");
         }
 
         if (roseGoneForever && slingGoneForever && wormGoneForever && !canMoveNow) 
@@ -252,7 +263,7 @@ public class ItemPickup : MonoBehaviour
 
     private IEnumerator PickupItem() 
     {
-        pickupSound.Play();
+        pickupSound.PlayDelayed(0.5f);
         animator.SetBool("isPickingUp", true);
         yield return new WaitForSeconds(0.7f);
         animator.SetBool("isPickingUp", false);
@@ -452,22 +463,23 @@ public class ItemPickup : MonoBehaviour
 
     private IEnumerator HoldingTheAnimLong()
     {
-        yield return new WaitForSeconds(13f);
+        yield return new WaitForSeconds(15f);
         holdTheAnim = false;
 
     }
 
     private IEnumerator HoldingTheAnimShort()
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(7f);
         holdTheAnimShort = false;
+        princessAudioShort.gameObject.SetActive(false);
 
     }
 
     private IEnumerator HoldingTheFootstepstLong()
     {
         footsteps.enabled = false;
-        yield return new WaitForSeconds(13f);
+        yield return new WaitForSeconds(15f);
         footsteps.enabled = true;
         
     }
@@ -475,8 +487,24 @@ public class ItemPickup : MonoBehaviour
     private IEnumerator HoldingTheFootstepstShort()
     {
         footsteps.enabled = false;
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(7f);
         footsteps.enabled = true;
         
+    }
+
+    private IEnumerator HoldingTheFootstepstForever()
+    {
+        footsteps.enabled = false;
+        yield return new WaitForSeconds(90f);
+        footsteps.enabled = false;
+
+    }
+
+    private IEnumerator killedByBear()
+    {
+        footsteps.enabled = false;
+        playerScript.enabled = false;
+        yield return new WaitForSeconds(8f);
+        restartUI.SetActive(true);
     }
 }
