@@ -428,6 +428,9 @@ public class ItemPickup : MonoBehaviour
         SlingTaken = false;
         LyreTaken = true;
         WormTaken = false;
+        
+        inAreaLyre = false;
+        canPickUpItem = false;
 
         StartCoroutine("ItemsToStartingPlaces");
     }
