@@ -460,19 +460,19 @@ public class ItemPickup : MonoBehaviour
         if (!roseGoneForever && !RoseTaken) 
         {
             roseObject.SetActive(true);
-            roseOutline.SpriteRendererOfChildren.sortingOrder = -1;
+            roseOutline.SpriteRendererOfChildren.sortingOrder = -2;
         }
 
         if (!wormGoneForever && !WormTaken)
         {
             wormObject.SetActive(true);
-            wormOutline.SpriteRendererOfChildren.sortingOrder = -1;
+            wormOutline.SpriteRendererOfChildren.sortingOrder = -2;
         }
 
         if (!slingGoneForever && !SlingTaken)
         {
             slingObject.SetActive(true);
-            slingOutline.SpriteRendererOfChildren.sortingOrder = -1;
+            slingOutline.SpriteRendererOfChildren.sortingOrder = -2;
         }
     }
 

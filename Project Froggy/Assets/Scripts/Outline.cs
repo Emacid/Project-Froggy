@@ -43,7 +43,7 @@ public class Outline : MonoBehaviour
     {
         Debug.Log("Player Outline Alanýndan Çýktý!");
         ItemPickup.canPickUpItem = false;
-        SpriteRendererOfChildren.sortingOrder = -1;
+        SpriteRendererOfChildren.sortingOrder = -2;
     }
 
 
